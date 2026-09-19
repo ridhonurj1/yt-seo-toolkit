@@ -152,9 +152,14 @@ def plan_ab_test(thumb_a_path: str, thumb_b_path: str, video_title: str) -> dict
             }
         )
 
+    a, b = plan["variants"][0], plan["variants"][1]
+    if a["score"] == b["score"]:
+        winner = "SERI — pakai Test & Compare untuk memutuskan"
+    elif a["score"] > b["score"]:
+        winner = f"Variant A unggul skor heuristik ({a['score']} vs {b['score']})"
+    else:
+        winner = f"Variant B unggul skor heuristik ({b['score']} vs {a['score']})"
     plan["recommendation"] = (
-        f"Variant {plan['variants'][0]['label']} skor lebih tinggi "
-        f"({plan['variants'][0]['score']} vs {plan['variants'][1]['score']}) — "
-        "tapi biarkan Test & Compare yang memutuskan dengan data impresi nyata"
+        f"{winner} — tetap biarkan Test & Compare memutuskan dengan data impresi nyata"
     )
     return plan
